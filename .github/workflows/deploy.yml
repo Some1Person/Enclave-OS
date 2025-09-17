@@ -1,0 +1,22 @@
+name: Deploy to Neocities
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Neocities
+        uses: bcomnes/deploy-to-neocities@v3
+        with:
+          # This pulls your key from GitHub's secure storage.
+          # DO NOT replace this line with your actual key.
+          api_key: ${{ secrets.NEOCITIES_API_TOKEN }}
+          dist_dir: public
