@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enclave OS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://unpkg.com/docx@7.3.0/build/index.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+    <div id="desktop">
+        <div class="desktop-icon" data-app="monitor">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M21 16H3V4h18m0-2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/><path fill="currentColor" d="M7 12h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm-8-4h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>
+            <span>System Monitor</span>
+        </div>
+        <div class="desktop-icon" data-app="personnel">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>Personnel DB</span>
+        </div>
+         <div class="desktop-icon" data-app="rd">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14.12 10.47L12 12.59l-2.13-2.12l-1.41 1.41L10.59 14l-2.12 2.12l1.41 1.41L12 15.41l2.12 2.12l1.41-1.41L13.41 14l2.12-2.12zM12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8a8 8 0 0 1-8 8z"/></svg>
+            <span>R&D Console</span>
+        </div>
+        <div class="desktop-icon" data-app="chimera">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.25c-5.33 0-9.75 4.42-9.75 9.75s4.42 9.75 9.75 9.75 9.75-4.42 9.75-9.75S17.33 2.25 12 2.25zm0 1.5c4.5 0 8.25 3.75 8.25 8.25s-3.75 8.25-8.25 8.25S3.75 16.5 3.75 12 7.5 3.75 12 3.75zm-1.5 3v1.5h3V5.25h-3zm0 4.5v6h3v-6h-3z"/></svg>
+            <span>Project Chimera</span>
+        </div>
+        <div class="desktop-icon" data-app="map">
+             <svg class="icon-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5a2.5 2.5 0 0 1 0 5z"/></svg>
+            <span>Tactical Map</span>
+        </div>
+        <div class="desktop-icon" data-app="notes">
+            <svg class="icon-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            <span>Secure Notes</span>
+        </div>
+    </div>
+
+    <div id="taskbar">
+        <button id="start-button">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                 <text x="50" y="55" font-family="Orbitron, sans-serif" font-size="80" font-weight="bold" fill="#ccc" text-anchor="middle" dominant-baseline="middle">E</text>
+            </svg>
+            <span>Start</span>
+        </button>
+        <div id="taskbar-apps"></div>
+        <div id="clock"></div>
+    </div>
+
+    <div id="start-menu" style="display: none;">
+        <ul>
+            <li data-app="monitor">System Monitor</li>
+            <li data-app="personnel">Personnel DB</li>
+            <li data-app="rd">R&D Console</li>
+            <li data-app="chimera">Project Chimera</li>
+            <li data-app="map">Tactical Map</li>
+            <li data-app="notes">Secure Notes</li>
+            <li class="separator"></li>
+            <li>System Settings</li>
+            <li class="separator"></li>
+            <li>Log Off</li>
+        </ul>
+    </div>
+    
+    <!-- TEMPLATES -->
+    <template id="window-template">
+        <div class="window">
+            <div class="window-title-bar">
+                <span class="title"></span>
+                <div class="window-controls">
+                    <button class="window-control-btn" data-action="minimize">_</button>
+                    <button class="window-control-btn" data-action="maximize">[]</button>
+                    <button class="window-control-btn close" data-action="close">X</button>
+                </div>
+            </div>
+            <div class="window-body">
+                <!-- App content injected here -->
+            </div>
+        </div>
+    </template>
+    
+    <template id="enclave-app-template">
+        <div id="enclave-app-container" class="enclave-app-body theme-green">
+            <!-- Cursors are now handled via CSS on the body tag -->
+            <div class="terminal-housing-wrapper">
+                <div class="screen-assembly terminal-housing">
+                    <div id="crt-screen" class="crt-container screen-off">
+                        <div id="cracked-screen-overlay">
+                                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M 10 10 L 400 450 L 420 420 L 700 800 L 720 780 M 410 435 L 200 850" stroke="var(--crack-color)" stroke-width="2" fill="none" style="filter: drop-shadow(0 0 3px var(--crack-color));"/>
+                                    <path d="M 90vw 10 L 400 500 L 350 550" stroke="var(--crack-color)" stroke-width="1" fill="none" style="filter: drop-shadow(0 0 2px var(--crack-color));"/>
+                                </svg>
+                        </div>
+                        <div id="boot-sequence"></div>
+                        <div id="login-screen" style="display:none;">
+                            <div style="flex-grow: 1;"></div>
+                            <h3>[ AUTHENTICATION REQUIRED ]</h3>
+                            <div class="input-group" style="max-width: 400px; margin: 20px auto;">
+                                <label for="password-input">PASSWORD:</label>
+                                <input type="password" id="password-input">
+                            </div>
+                            <button class="button" id="login-btn">> SUBMIT <</button>
+                            <p id="login-error"></p>
+                            <div style="flex-grow: 1;"></div>
+                        </div>
+                        <div id="main-content-wrapper">
+                            <!-- Nav bar is now part of individual templates -->
+                            <!-- This is the container for actual views -->
+                            <div id="system-home-view" class="content-view">
+                                <div class="view-content">
+                                    <div id="ascii-logo-home" class="ascii-logo reveal-line"></div>
+                                    <h3 class="reveal-line">[ SECURE TERMINAL ACCESS ]</h3>
+                                    <p class="reveal-line" id="welcome-message"></p>
+                                    <p class="reveal-line">> This mainframe provides centralized access to all active R&D projects. Use the navigation bar above to access project logs and databases.</p>
+                                    <p class="reveal-line">> All entries are monitored and logged per Enclave Security Protocol 7-Delta. Unauthorized access is punishable by immediate termination.</p>
+                                    <p class="reveal-line">> For the preservation of a pure America.</p>
+                                    <div class="terminal-section reveal-line">
+                                        <h3>[ MOJAVE WEATHER ]</h3>
+                                        <p id="weather-report"></p>
+                                    </div>
+                                    <div class="terminal-section reveal-line">
+                                        <h3>[ SECURITY PROTOCOLS ]</h3>
+                                        <button class="button delete" id="home-lockdown-btn">> INITIATE FACILITY LOCKDOWN</button>
+                                        <button class="button" id="purge-files-btn">> PURGE TEMP FILES</button>
+                                        <button class="button" id="network-scan-btn">> RUN NETWORK SCAN</button>
+                                        <button class="button" id="display-directive-btn">> DISPLAY DIRECTIVE</button>
+                                        <details>
+                                            <summary>> SYSTEM DIAGNOSTICS</summary>
+                                            <div>
+                                                <button class="button" id="run-diagnostics-btn">> RUN DIAGNOSTICS</button>
+                                                <pre id="diagnostics-output" style="margin-top: 15px;"></pre>
+                                            </div>
+                                        </details>
+                                        <pre id="security-action-output" style="margin-top: 15px;"></pre>
+                                        <p class="warning-note">[ WARNING: For emergency use only. Unauthorized activation is a Class A offense. ]</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="profiles-view" class="content-view">
+                                <div class="view-content reveal-line">
+                                    <div id="profile-list-container" class="terminal-section">
+                                        <h3>[ PERSONNEL ROSTER ]</h3>
+                                        <button class="button" id="new-profile-btn" style="width: 100%; margin-bottom: 10px;">> RECRUIT NEW PERSONNEL</button>
+                                        <div id="profile-list-items"></div>
+                                    </div>
+                                    <div id="profile-details-container" class="terminal-section">
+                                        <div id="profile-details">
+                                            <pre id="profile-portrait"></pre>
+                                            <div id="profile-info">
+                                                <p><strong>NAME:</strong> <span id="profile-detail-name"></span></p>
+                                                <p><strong>TITLE:</strong> <span id="profile-detail-title"></span></p>
+                                                <p><strong>CLEARANCE:</strong> <span id="profile-detail-clearance"></span></p>
+                                                <p><strong>STATUS:</strong> <span id="profile-detail-status"></span></p>
+                                                <p><strong>ASSIGNMENT:</strong> <span id="profile-detail-assignment"></span></p>
+                                            </div>
+                                        </div>
+                                        <div id="profile-bio">
+                                            <h3>[ BIO & PSYCH EVALUATION ]</h3>
+                                            <p id="profile-detail-bio"></p>
+                                        </div>
+                                        <div style="margin-top: 10px;">
+                                            <button class="button" id="switch-profile-btn">> SWITCH TO PROFILE</button>
+                                            <button class="button delete" id="delete-profile-btn">DELETE PROFILE</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="resource-tracker-view" class="content-view"><div class="view-content"><div class="terminal-section reveal-line"><h3>[ RESOURCE OVERVIEW ]</h3><div id="resource-overview"><div class="resource-item"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg><div>MANPOWER<br><span class="resource-value" id="res-manpower">15000 / 20000</span></div></div><div class="resource-item"><svg viewBox="0 0 24 24" style="transform: rotate(90deg);"><path d="M22,15.5V17c0,2.1-1.9,4-4,4H6c-2.1,0-4-1.9-4-4v-1.5c0-1.2,0.8-2.3,1.9-2.7l8.1-2.8l8.1,2.8C21.2,13.2,22,14.3,22,15.5z M4.5,7.5C4.5,7.5,4.5,7.5,4.5,7.5L4.5,4c0-0.6,0.4-1,1-1h13c0.6,0,1,0.4,1,1v3.5c0,0,0,0,0,0H4.5z"></path></svg><div>AMMUNITION<br><span class="resource-value" id="res-ammo">500000</span></div></div><div class="resource-item"><svg viewBox="0 0 24 24"><path d="M16 6V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H2v13c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6h-6zm-6-2h4v2h-4V4zM4 8h16v11H4V8zm4 1h2v2H8zm4 0h2v2h-2zm-4 3h2v2H8zm4 0h2v2h-2z"></path></svg><div>FUEL RESERVES<br><span class="resource-value" id="res-fuel">8000</span>(<span class="resource-value negative" id="res-fuel-change">-20/hr</span>)</div></div><div class="resource-item"><svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"></path></svg><div>ENERGY GRID<br><span class="resource-value" id="res-energy">850 / 1200 MW</span></div></div><div class="resource-item"><svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"></path></svg><div>STEEL<br><span class="resource-value" id="res-steel">12000</span>(<span class="resource-value positive" id="res-steel-change">+50/hr</span>)</div></div><div class="resource-item"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 6h16v12H4V6zm2 2v2h2V8H6zm3 0v2h2V8H9zm3 0v2h2V8h-2zm3 0v2h2V8h-2zM6 12v2h2v-2H6zm3 0v2h2v-2H9zm3 0v2h2v-2h-2zm3 0v2h2v-2h-2z"></path></svg><div>HI-TECH PARTS<br><span class="resource-value" id="res-components">1500</span>(<span class="resource-value positive" id="res-components-change">+5/hr</span>)</div></div></div></div><div class="terminal-section reveal-line"><h3>[ ACTIVE PRODUCTION LINES ]</h3><table id="production-lines" class="data-table"><thead><tr><th>Assignment</th><th>Progress</th><th>Status</th></tr></thead><tbody></tbody></table></div><div class="terminal-section reveal-line"><h3>[ LOGISTICS & INTELLIGENCE LOG ]</h3><div id="logistics-log"></div></div></div></div>
+                            <div id="chimera-log-view" class="content-view"><div class="view-content"><div class="terminal-section reveal-line"><h3>[ PROJECT BRIEFING ]</h3><details><summary>> VIEW PROJECT CHIMERA DIRECTIVE</summary><div><h4>OBJECTIVE:</h4><p>The primary goal of Project Chimera is to create powerful, expendable bio-weapons for the Enclave...</p><h4>THE PROCESS:</h4><p>1. <strong>Acquisition</strong>, 2. <strong>Baseline Assessment</strong>, 3. <strong>Augmentation</strong>, 4. <strong>Viability Testing</strong></p></div></details></div><div class="terminal-section reveal-line"><h3>[ NEW LOG ENTRY: PROJECT CHIMERA ]</h3><div class="input-group"><label>LOGGED BY (SCIENTIST):</label> <input type="text" id="chimera-logged-by" value="Dr. James Otto Porter" readonly=""></div><div class="input-group"><label>DATE:</label> <input type="text" id="chimera-date" value=""></div><div class="input-group"><label>SUBJECT DESIGNATION:</label> <input type="text" id="chimera-subject-id" placeholder="e.g., SM-007, G-012" list="specimen-datalist"></div></div><div class="terminal-section reveal-line"><h3>I. Test Subject Profile & Augmentation Plan</h3><textarea id="chimera-profile" rows="5">Subject is a [Super Mutant/Feral Ghoul], acquired from [Location]...</textarea></div><div class="terminal-section reveal-line"><h3>II. Procedure Notes</h3><textarea id="chimera-procedure" rows="5">Surgical procedure commenced at [Time]. Subject sedated...</textarea></div><div class="terminal-section reveal-line"><h3>III. Results & Analysis</h3><textarea id="chimera-analysis" rows="5">Post-op combat trials initiated. Subject's performance against [Target type] was [Outcome]...</textarea></div><div class="terminal-section reveal-line"><h3>IV. Final Viability Assessment</h3><textarea id="chimera-viability" rows="3">CONCLUSION: The augmentations are [Viable/Conditionally Viable/Non-Viable]...</textarea></div><button class="button reveal-line" id="download-pdf-btn">> DOWNLOAD LOG AS PDF</button></div></div>
+                            <div id="specimen-database-view" class="content-view"><div class="view-content"><div class="terminal-section reveal-line"><h3>[ LOG NEW SPECIMEN ]</h3><div class="input-group"><label for="specimenId">Specimen ID:</label><input type="text" id="specimenId" placeholder="e.g. SM-001"></div><div class="input-group"><label for="specimenType">Type/Species:</label><input type="text" id="specimenType" placeholder="Super Mutant"></div><div class="input-group"><label for="acquisitionLoc">Acquisition Loc:</label><input type="text" id="acquisitionLoc" placeholder="Capital Wasteland"></div><div class="input-group"><label for="status">Status:</label><select id="status"><option>In Cryo-Stasis</option><option>Active Testing</option><option>Decommissioned</option></select></div><button class="button" id="add-specimen-btn">> ADD TO ROSTER</button></div><div class="terminal-section reveal-line"><h3>[ DATA MANAGEMENT PROTOCOLS ]</h3><textarea class="data-transfer" id="specimen-data-transfer" rows="4" placeholder="Paste exported specimen data here to import..."></textarea><br><button class="button" id="import-specimen-btn">> IMPORT ROSTER</button><button class="button" id="export-specimen-btn">> EXPORT ROSTER TO TEXT</button><button class="button" id="export-specimen-pdf-btn">> EXPORT ROSTER AS PDF</button><button class="button delete" id="delete-all-specimens-btn">> PURGE ROSTER</button><p class="warning-note">[ WARNING: Exported data is unencrypted. Secure any text files as per Enclave Protocol 11-A. ]</p></div><div class="terminal-section reveal-line"><h3>[ CURRENT SPECIMEN ROSTER ]</h3><table class="data-table"><thead><tr><th>ID</th><th>Type</th><th>Acquired</th><th>Status</th><th>Actions</th></tr></thead><tbody id="specimen-list"></tbody></table></div></div></div>
+                            <div id="rd-tools-view" class="content-view"><div class="view-content"><div class="terminal-section reveal-line"><h3>[ CHEMICAL COMPOUND ANALYZER ]</h3><div class="input-group"><label>Agent 1 (Preset):</label><select id="chem-agent-1"><option>(None)</option><option>FEV Strand II</option><option>Rad-X Concentrate</option><option>Psycho-Active Agent</option><option>Stealth Boy Emitter Fluid</option><option>Nuka-Cola Quantum Isotope</option><option>Jet Inhalant</option></select></div><div class="input-group"><label>Agent 1 (Custom):</label><input type="text" id="chem-agent-custom-1" placeholder="e.g., Deathclaw Blood"></div><div class="input-group"><label>Agent 2 (Preset):</label><select id="chem-agent-2"><option>(None)</option><option>FEV Strand II</option><option>Rad-X Concentrate</option><option>Psycho-Active Agent</option><option>Stealth Boy Emitter Fluid</option><option>Nuka-Cola Quantum Isotope</option><option>Jet Inhalant</option></select></div><div class="input-group"><label>Agent 2 (Custom):</label><input type="text" id="chem-agent-custom-2" placeholder="e.g., Mentats Solution"></div><div class="input-group"><label>Agent 3 (Preset):</label><select id="chem-agent-3"><option>(None)</option><option>FEV Strand II</option><option>Rad-X Concentrate</option><option>Psycho-Active Agent</option><option>Stealth Boy Emitter Fluid</option><option>Nuka-Cola Quantum Isotope</option><option>Jet Inhalant</option></select></div><div class="input-group"><label>Agent 3 (Custom):</label><input type="text" id="chem-agent-custom-3" placeholder="e.g., Purified Water"></div><button class="button" id="analyze-compound-btn">> ANALYZE COMPOUND</button><pre id="compound-analysis-output" style="margin-top: 15px;"></pre></div><div class="terminal-section reveal-line"><h3>[ GENETIC SEQUENCE MATCHER ]</h3><div class="input-group"><label for="genetic-specimen-1">Specimen A:</label><select id="genetic-specimen-1"></select></div><div class="input-group"><label for="genetic-specimen-2">Specimen B:</label><select id="genetic-specimen-2"></select></div><button class="button" id="compare-sequence-btn">> COMPARE SEQUENCE</button><div id="progress-bar-container" style="display: none;"><div id="progress-bar"></div></div><pre id="sequence-comparison-output" style="margin-top: 15px;"></pre></div><div class="terminal-section reveal-line"><h3>[ BALLISTIC CALCULATOR ]</h3><div class="input-group"><label for="ballistic-weapon">Weapon System:</label><select id="ballistic-weapon"></select></div><div class="input-group"><label for="ballistic-ammo">Ammunition Type:</label><select id="ballistic-ammo"></select></div><div class="input-group"><label for="ballistic-range">Target Range (m):</label><input type="number" id="ballistic-range" value="100"></div><button class="button" id="calculate-ballistics-btn">> CALCULATE TRAJECTORY</button><pre id="ballistic-output" style="margin-top: 15px;"></pre></div><div class="terminal-section reveal-line"><h3>[ RADIO SIGNAL DECRYPTOR ]</h3><div class="input-group"><label for="signal-select">Intercepted Signal:</label><select id="signal-select"><option value="B7">Signal Intercept B-7 (Unidentified)</option><option value="UW">Unknown Wasteland Broadcast</option><option value="NCR">NCR Frequency 108.8</option><option value="LEG">Legion Cipher M-3</option><option value="BoS">Brotherhood Emergency Beacon</option><option value="RAI">Raider Scrambled Comm-Link</option></select></div><button class="button" id="decrypt-signal-btn">> INITIATE DECRYPTION</button><pre id="decryptor-output" style="margin-top: 15px;"></pre></div></div></div>
+                            <div id="rank-view" class="content-view"><div class="view-content reveal-line"><div id="rank-list-container" class="terminal-section"><h3>[ RANK HIERARCHY ]</h3><div id="rank-list"></div></div><div id="rank-details-container" class="terminal-section"><h3 id="rank-title">Rank Details</h3><div id="rank-insignia"></div><div id="rank-details-info"></div></div></div></div>
+                            <div id="map-view" class="content-view"><div class="view-content"><div class="terminal-section reveal-line" style="display: flex; flex-direction: column; height: 95%;"><div id="map-controls" style="flex-shrink: 0;"><div class="input-group"><label for="map-search">SEARCH LOCATION:</label><input type="text" id="map-search" placeholder="Enter abbreviation (e.g. STRIP, HD)..."></div><div id="map-info"><h4>[ TACTICAL MAP: MOJAVE SECTOR ]</h4><p id="map-info-text">Select a marked location for briefing data.</p></div></div><div id="map-display-wrapper"><div id="map-scanline"></div><pre id="map-ascii"></pre></div></div></div></div>
+                             <div id="notes-view" class="content-view"><div class="view-content reveal-line"><div id="notes-list-container" class="terminal-section"><h3>[ NOTE FILES ]</h3><button class="button" id="new-note-btn" style="width: 100%; margin-bottom: 10px;">> NEW NOTE</button><div id="note-list"></div></div><div id="note-editor-container" class="terminal-section"><div class="input-group"><label>TITLE:</label><input type="text" id="note-title" placeholder="Enter note title..."></div><textarea id="note-content" placeholder="Begin typing your notes..."></textarea><div><button class="button" id="save-note-btn">> SAVE NOTE</button><button class="button delete" id="delete-note-btn">DELETE NOTE</button></div><div class="terminal-section"><h3>[ FILE MANAGEMENT ]</h3><button class="button" id="notes-export-btn">> EXPORT ALL NOTES</button><button class="button" id="notes-import-btn">> IMPORT NOTES</button></div></div></div></div>
+                       </div>
+                        <div id="volume-osd"><div id="volume-osd-bar"><div id="volume-osd-level"></div></div></div>
+                    </div>
+                    <div class="terminal-footer">
+                        <div class="footer-screen"><span id="footer-status-text"></span></div>
+                        <div id="footer-controls">
+                            <button id="hw-settings-btn" class="hw-button" data-label="CONFIG"><svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24-.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69-.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"></path></svg></button>
+                            <button id="hw-vol-down-btn" class="hw-button" data-label="VOL-"><svg viewBox="0 0 24 24"><path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"></path></svg></button>
+                            <button id="hw-vol-up-btn" class="hw-button" data-label="VOL+"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg></button>
+                            <button id="hw-cycle-btn" class="hw-button" data-label="CYCLE"><svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"></path></svg></button>
+                            <button id="power-button"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="alert-modal" class="modal-overlay"><div class="modal-box"><p id="alert-message"></p><button class="button" id="alert-confirm-btn">CONFIRM</button><button class="button" id="alert-cancel-btn">CANCEL</button></div></div>
+            <div id="password-prompt-modal" class="modal-overlay"><div class="modal-box"><h3 id="password-prompt-title">[ CLEARANCE REQUIRED ]</h3><p>Enter password to access this module.</p><div class="input-group" style="max-width: 300px; margin: auto;"><label for="password-prompt-input">PASSWORD:</label><input type="password" id="password-prompt-input"></div><p id="password-prompt-error" style="display: none;">[ ACCESS DENIED ]</p><button class="button" id="password-prompt-submit-btn">> SUBMIT <</button><button class="button" id="password-prompt-cancel-btn">CANCEL</button></div></div>
+            <div id="new-profile-modal" class="modal-overlay"><div class="modal-box"><h3>[ RECRUIT NEW PERSONNEL ]</h3><div class="input-group"><label>Name:</label><input type="text" id="new-profile-name" placeholder="e.g. Dr. Anya Sharma"></div><div class="input-group"><label>Title:</label><input type="text" id="new-profile-title" placeholder="e.g. Lead Geneticist"></div><div class="input-group"><label>Clearance Level:</label><input type="text" id="new-profile-clearance" placeholder="e.g. Level 4"></div><div class="input-group"><label>Status:</label><select id="new-profile-status"><option>Active</option><option>MIA</option><option>Deceased</option><option>Retired</option></select></div><div class="input-group"><label>Assignment:</label><input type="text" id="new-profile-assignment" placeholder="e.g. Project Chimera"></div><div class="input-group"><label>Biography:</label><textarea id="new-profile-bio" rows="4"></textarea></div><button class="button" id="add-profile-btn">> ADD PROFILE</button><button class="button" id="new-profile-cancel-btn">CANCEL</button></div></div>
+            <div id="settings-modal" class="modal-overlay"><div class="modal-box"><h3>[ SYSTEM CALIBRATION ]</h3><div class="control-group"><label for="theme-select">Display Theme</label><select id="theme-select" class="input-group"><option value="theme-green">Classic Green</option><option value="theme-amber">Pip-Boy Amber</option><option value="theme-blue">Vault-Tec Blue</option><option value="theme-enclave-red">Enclave Red</option></select></div><div class="control-group"><label for="volume-slider">UI Volume</label><div class="slider-container"><input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.2"><span id="volume-value">20%</span></div></div><div class="control-group"><label for="brightness-slider">Screen Brightness</label><div class="slider-container"><input type="range" id="brightness-slider" min="50" max="150" value="100"><span id="brightness-value">100%</span></div></div><div class="control-group"><label for="zoom-slider">Screen Zoom</label><div class="slider-container"><input type="range" id="zoom-slider" min="75" max="150" step="5" value="100"><span id="zoom-value">100%</span></div></div><div class="control-group"><label for="scroll-speed-slider">Text Scroll Speed</label><div class="slider-container"><input type="range" id="scroll-speed-slider" min="0" max="100" step="5" value="35"><span id="scroll-speed-value">35ms</span></div></div><div class="control-group"><label for="autosave-slider">Autosave Interval</label><div class="slider-container"><input type="range" id="autosave-slider" min="5" max="60" step="5" value="30"><span id="autosave-value">30s</span></div></div><div class="control-group"><label>Effects & Security:</label><div class="checkbox-container"><input type="checkbox" id="toggle-crack"> <label for="toggle-crack">Cracked Screen</label></div><div class="checkbox-container"><input type="checkbox" id="mute-typing"> <label for="mute-typing">Mute Typing FX</label></div><div class="checkbox-container"><input type="checkbox" id="mute-ui"> <label for="mute-ui">Mute UI Beeps</label></div><div class="checkbox-container"><input type="checkbox" id="mute-hum"> <label for="mute-hum">Mute Ambient Hum</label></div></div><button class="button" id="settings-close-btn">> CLOSE</button></div></div>
+            <div id="lockdown-modal" class="modal-overlay"><div class="modal-box"><pre style="color: var(--warning-color); font-size: 1.5em;">
+         / \\
+        / ! \\
+       /_____\\
+                    </pre><h3 style="color: var(--warning-color);">[ !! SECURITY LOCKDOWN INITIATED !! ]</h3><p>System integrity compromised. Mainframe reboot in:</p><h1 id="lockdown-timer">10</h1><p>Enter override password to cancel reboot sequence.</p><div class="input-group" style="max-width: 300px; margin: auto;"><label for="lockdown-password">OVERRIDE:</label><input type="password" id="lockdown-password"></div><p id="lockdown-error" style="color: var(--warning-color); height: 1.5em;"></p></div></div>
+            <div id="bsod-overlay" class="modal-overlay" style="display: none; flex-direction: column;"><pre>
+        A fatal exception has occurred at 0028:C0011E36 in VXD VMM(01) + 
+        00010E36. The current application will be terminated.
+        
+        * Press any key to terminate the current application.
+        * Press CTRL+ALT+DEL again to restart your computer. You will
+          lose any unsaved information in all applications.
+        
+        Press any key to continue _
+                </pre></div>
+            <div id="save-indicator-overlay" class="modal-overlay"><div class="save-box"><pre>
+        |;;|                     |;;||
+        |[]|---------------------|[]||
+        |;;|                     |;;||
+        |;;|                     |;;||
+        |;;|                     |;;||
+        |;;|                     |;;||
+        |;;|                     |;;||
+        |;;|                     |;;||
+        |;;|_____________________|;;||
+        |;;;;;;;;;;;;;;;;;;;;;;;;;;;||
+        |;;;;;;_______________ ;;;;;||
+        |;;;;;|  ___          |;;;;;||
+        |;;;;;| |;;;|         |;;;;;||
+        |;;;;;| |;;;|         |;;;;;||
+        |;;;;;| |;;;|         |;;;;;||
+        |;;;;;| |;;;|         |;;;;;||
+        |;;;;;| |___|         |;;;;;||
+        \_____|_______________|_____||
+         ~~~~~^^^^^^^^^^^^^^^^^~~~~~~
+                    </pre><h3>Saving Progress...</h3></div></div>
+            <datalist id="specimen-datalist"></datalist>
+            <svg style="display: none;"><defs><symbol id="rank-chevron" viewBox="0 0 100 30"><polyline points="10,25 50,5 90,25"></polyline></symbol><symbol id="rank-rocker" viewBox="0 0 100 30"><path d="M10 5 Q50 25 90 5"></path></symbol><symbol id="rank-star" viewBox="0 0 100 100"><path d="M50 5 L61.8 38.2 L97.6 38.2 L67.9 59.6 L79.7 92.8 L50 71.4 L20.3 92.8 L32.1 59.6 L2.4 38.2 L38.2 38.2 Z" class="fill"></path></symbol><symbol id="rank-bar-filled" viewBox="0 0 100 100"><rect x="35" y="15" width="30" height="70" class="fill"></rect></symbol><symbol id="rank-bar-hollow" viewBox="0 0 100 100"><rect x="35" y="15" width="30" height="70" class="no-fill"></rect></symbol><symbol id="rank-bars-double" viewBox="0 0 100 100"><rect x="20" y="15" width="20" height="70" class="fill"></rect><rect x="60" y="15" width="20" height="70" class="fill"></rect></symbol><symbol id="rank-leaf-gold" viewBox="0 0 100 100"><path d="M50 20 C 30 40, 30 70, 50 90 C 70 70, 70 40, 50 20 Z M 50 90 L 45 75 L 55 75 Z" class="fill"></path></symbol><symbol id="rank-leaf-silver" viewBox="0 0 100 100"><path d="M50 10 C 20 30, 20 70, 50 90 C 80 70, 80 30, 50 10 Z M 50 90 L 45 70 L 55 70 Z" class="fill"></path></symbol><symbol id="rank-eagle" viewBox="0 0 100 100"><path d="M50 15 L20 40 L35 40 L35 70 L45 85 L55 85 L65 70 L65 40 L80 40 Z M40 25 L60 25 L50 40 Z" class="fill"></path></symbol></defs></svg>
+        </div>
+    </template>
+
+    <script type="module" src="index.tsx"></script>
+</body>
+</html>

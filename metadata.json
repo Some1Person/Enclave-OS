@@ -1,0 +1,5 @@
+{
+  "name": "Enclave OS",
+  "description": "A simulated desktop environment containing the Enclave R&D Mainframe terminal application.",
+  "requestFramePermissions": []
+}

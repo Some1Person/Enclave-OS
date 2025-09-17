@@ -1,0 +1,669 @@
+/* --- DESKTOP OS STYLES --- */
+:root {
+    --taskbar-height: 40px;
+    --desktop-bg: #2a2a3a;
+    --window-bg: #3c3c4c;
+    --window-title-bar: #252530;
+    --border-color-light: #555;
+    --border-color-dark: #1a1a1a;
+    --text-color-light: #ddd;
+}
+
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+body { 
+    height: 100vh; 
+    width: 100vw;
+    margin: 0; 
+    padding: 0; 
+    overflow: hidden;
+    background-color: var(--desktop-bg); 
+    background-image:
+        linear-gradient(rgba(255,255,255,.07) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(255,255,255,.07) 2px, transparent 2px),
+        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+    background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+    background-position:-2px -2px, -2px -2px, -1px -1px, -1px -1px;
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--text-color-light);
+}
+
+#desktop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: var(--taskbar-height);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 15px;
+}
+
+.desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 110px;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+.desktop-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+.desktop-icon:active {
+     background-color: rgba(255, 255, 255, 0.2);
+}
+.desktop-icon .icon-svg {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 5px;
+    color: #ccc;
+    filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.5));
+}
+.desktop-icon span {
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    word-break: break-word;
+}
+
+#taskbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--taskbar-height);
+    background: var(--window-title-bar);
+    border-top: 2px solid var(--border-color-light);
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    z-index: 500;
+}
+
+#start-button {
+    background: #3a3a4a;
+    border: 2px outset var(--border-color-light);
+    color: var(--text-color-light);
+    padding: 2px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    cursor: pointer;
+}
+#start-button:active {
+    border-style: inset;
+}
+
+#taskbar-apps {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.taskbar-item {
+    background: #5a5a6a;
+    border: 2px outset var(--border-color-light);
+    color: var(--text-color-light);
+    padding: 2px 15px;
+    height: 30px;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.taskbar-item.active {
+    border-style: inset;
+    background: #4a4a5a;
+}
+
+#clock {
+    padding: 0 10px;
+    color: var(--text-color-light);
+    font-size: 18px;
+}
+
+#start-menu {
+    position: absolute;
+    bottom: var(--taskbar-height);
+    left: 0;
+    width: 250px;
+    background: var(--window-bg);
+    border: 2px outset var(--border-color-light);
+    z-index: 600;
+    display: none;
+}
+#start-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 5px;
+}
+#start-menu li {
+    padding: 8px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+#start-menu li:hover {
+    background: #4a6a8a;
+    color: white;
+}
+#start-menu li.separator {
+    height: 2px;
+    padding: 0;
+    margin: 5px 0;
+    background: var(--border-color-dark);
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+
+/* --- WINDOW STYLES --- */
+.window {
+    position: absolute;
+    width: 80vw;
+    height: 80vh;
+    max-width: 1400px;
+    min-width: 640px;
+    min-height: 480px;
+    background: var(--window-bg);
+    border: 2px outset var(--border-color-light);
+    display: none; /* Hidden by default */
+    flex-direction: column;
+    resize: both;
+    overflow: hidden;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+}
+
+.window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100vh - var(--taskbar-height)) !important;
+    resize: none;
+}
+
+.window-title-bar {
+    background: var(--window-title-bar);
+    color: var(--text-color-light);
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    flex-shrink: 0;
+    font-size: 18px;
+}
+
+.window-controls {
+    display: flex;
+    gap: 3px;
+}
+.window-control-btn {
+    width: 22px;
+    height: 22px;
+    border: 2px outset var(--border-color-light);
+    background: #4a4a5a;
+    color: var(--text-color-light);
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.window-control-btn:active {
+    border-style: inset;
+}
+.window-control-btn.close {
+    background-color: #a04040;
+}
+
+.window-body {
+    flex-grow: 1;
+    padding: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: #000;
+}
+
+
+/* --- SCOPED ENCLAVE TERMINAL STYLES --- */
+
+/* --- THEME DEFINITIONS --- */
+#enclave-app-container .theme-green {
+    --monitor-bg: #041004; --text-color: #e0ffe0; --text-glow: rgba(180, 255, 180, 0.5);
+    --header-color: #ffffff; --header-glow: rgba(220, 255, 220, 0.7);
+    --highlight-bg: rgba(150, 255, 150, 0.15); --highlight-text: #ffffff;
+    --border-color: #9fff9f; --input-bg: rgba(150, 255, 150, 0.05);
+    --button-bg: #1a4d1a; --button-hover-bg: #2a6d2a;
+    --crack-color: rgba(180, 255, 180, 0.6);
+    --rank-color-1: #1a4d1a;
+    --rank-color-2: #2a6d2a;
+}
+#enclave-app-container .theme-amber {
+    --monitor-bg: #1A0F00; --text-color: #FFB03B; --text-glow: rgba(255, 176, 59, 0.5);
+    --header-color: #FFD700; --header-glow: rgba(255, 215, 0, 0.7);
+    --highlight-bg: rgba(255, 176, 59, 0.15); --highlight-text: #FFD700;
+    --border-color: #FFB03B; --input-bg: rgba(255, 176, 59, 0.05);
+    --button-bg: #6D4D00; --button-hover-bg: #8D6D2A;
+    --crack-color: rgba(255, 176, 59, 0.6);
+    --rank-color-1: #6D4D00;
+    --rank-color-2: #8D6D2A;
+}
+#enclave-app-container .theme-blue {
+    --monitor-bg: #020C17; --text-color: #A4D7F5; --text-glow: rgba(164, 215, 245, 0.5);
+    --header-color: #E0FFFF; --header-glow: rgba(224, 255, 255, 0.7);
+    --highlight-bg: rgba(164, 215, 245, 0.15); --highlight-text: #E0FFFF;
+    --border-color: #5F9EA0; --input-bg: rgba(164, 215, 245, 0.05);
+    --button-bg: #004D6D; --button-hover-bg: #006D8D;
+    --crack-color: rgba(164, 215, 245, 0.6);
+    --rank-color-1: #004D6D;
+    --rank-color-2: #006D8D;
+}
+#enclave-app-container .theme-enclave-red {
+    --monitor-bg: #100000; --text-color: #ff4444; --text-glow: rgba(255, 50, 50, 0.5);
+    --header-color: #ff8888; --header-glow: rgba(255, 100, 100, 0.7);
+    --highlight-bg: rgba(255, 50, 50, 0.15); --highlight-text: #ffffff;
+    --border-color: #dd2222; --input-bg: rgba(255, 50, 50, 0.05);
+    --button-bg: #6d1a1a; --button-hover-bg: #8d2a2a;
+    --crack-color: rgba(255, 80, 80, 0.6);
+    --rank-color-1: #6d1a1a;
+    --rank-color-2: #8d2a2a;
+}
+
+#enclave-app-container {
+    --delete-bg: #6d1a1a; --delete-hover-bg: #8d2a2a;
+    --warning-color: #ff8f8f;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.enclave-app-body { 
+    font-family: 'VT323', monospace; font-size: 22px; 
+    color: var(--text-color);
+    text-shadow: 0 0 5px var(--text-glow), 0 0 8px var(--text-glow);
+}
+
+.enclave-app-body.cursors-active {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='white' d='M0 0l24 12L0 24V0z'/%3E%3C/svg%3E") 0 0, auto;
+}
+
+.enclave-app-body.cursors-active.cursor-wait { cursor: wait; }
+
+.enclave-app-body.cursors-active.text-input-mode {
+     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Ctext x='0' y='20' font-family='VT323, monospace' font-size='24' fill='white'%3E>_%3C/text%3E%3C/svg%3E") 0 0, auto;
+}
+
+#enclave-app-container .terminal-housing-wrapper {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.2s;
+    transform-origin: center center;
+}
+
+#enclave-app-container .terminal-housing {
+    background: #000;
+    display: flex; flex-direction: column;
+    box-sizing: border-box;
+    height: 100%;
+    border-radius: 0;
+    transform: perspective(1500px) scale(1.03); /* Screen Curvature */
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.85); /* Vignette */
+}
+
+#enclave-app-container .screen-assembly {
+    flex-grow: 1; 
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#enclave-app-container .crt-container {
+    flex-grow: 1;
+    background: var(--monitor-bg);
+    border: none;
+    border-radius: 0; 
+    padding: 1rem 2rem;
+    box-sizing: border-box;
+    box-shadow: inset 0 0 20px #000;
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-height: 0;
+    color: var(--text-color);
+}
+
+#enclave-app-container .crt-container.screen-off { opacity: 0; transform: scale(0.1, 0.005); }
+
+#enclave-app-container .crt-container::after {
+    content: ' '; display: block; position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0; pointer-events: none;
+    z-index: 100;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+                radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.8) 100%);
+    background-size: 100% 3px, 100% 100%;
+}
+
+#enclave-app-container .crt-container.glitch-active {
+    animation: glitch-anim 0.2s steps(2, end) infinite;
+}
+
+@keyframes glitch-anim {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(3px, -3px); }
+    60% { transform: translate(-3px, 3px); }
+    80% { transform: translate(3px, -3px); }
+    100% { transform: translate(0); }
+}
+
+#enclave-app-container #cracked-screen-overlay {
+    display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 101;
+}
+#enclave-app-container #cracked-screen-overlay.active { display: block; }
+
+#enclave-app-container #main-content-wrapper, #enclave-app-container #login-screen { display: flex; flex-direction: column; height: 100%; }
+
+#enclave-app-container #main-content-wrapper { opacity: 0; transition: opacity 1.5s ease-in; }
+#enclave-app-container #main-content-wrapper.visible { opacity: 1; }
+
+#enclave-app-container .header-title {
+    font-family: 'Orbitron', sans-serif; text-align: center; font-size: 1.4em;
+    margin: 0 0 5px 0; color: var(--header-color); text-shadow: 0 0 8px var(--header-glow);
+}
+
+#enclave-app-container .main-nav {
+    display: flex; border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color); margin-bottom: 15px;
+    overflow-x: auto; overflow-y: hidden; padding-bottom: 5px; 
+    flex-shrink: 0;
+}
+#enclave-app-container .main-nav a {
+    color: var(--text-color); text-decoration: none; padding: 5px 15px;
+    transition: all 0.2s; border-left: 1px solid var(--border-color);
+    white-space: nowrap; cursor: none; flex-shrink: 0;
+    display: flex; align-items: center; gap: 10px;
+}
+#enclave-app-container .main-nav a:first-child { border-left: none; }
+#enclave-app-container .main-nav a.active, #enclave-app-container .main-nav a:hover, #enclave-app-container a.keyboard-focus {
+    background-color: var(--highlight-bg); color: var(--highlight-text);
+    text-shadow: 0 0 8px var(--highlight-text);
+}
+#enclave-app-container .main-nav::-webkit-scrollbar { height: 8px; }
+#enclave-app-container .main-nav::-webkit-scrollbar-track { background: transparent; }
+#enclave-app-container .main-nav::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 4px; }
+
+#enclave-app-container .content-view { flex-grow: 1; overflow-y: auto; padding-right: 10px; display: none; position: relative; min-height: 0;}
+#enclave-app-container .content-view.active { display: block; }
+
+#enclave-app-container .reveal-line { visibility: hidden; transition: visibility 0s; }
+
+#enclave-app-container #system-home-view { text-align: center; }
+#enclave-app-container #system-home-view p { max-width: 600px; margin: 15px auto; text-align: left; }
+
+#enclave-app-container pre { white-space: pre-wrap; word-wrap: break-word; margin: 0; text-shadow: 0 0 5px var(--text-glow); }
+#enclave-app-container .ascii-logo {
+    height: 150px;
+    width: 100%;
+    margin: 10px 0;
+    color: var(--header-color);
+}
+#enclave-app-container .cursor { display: inline-block; width: 1ch; height: 1.2em; background-color: var(--text-color); animation: blink 1s step-end infinite; }
+@keyframes blink { from, to { background-color: transparent; } 50% { background-color: var(--text-color); } }
+
+#enclave-app-container .terminal-section { border: 1px solid var(--border-color); padding: 15px; margin-bottom: 20px; background: rgba(0,0,0,0.2); }
+#enclave-app-container .terminal-section h3 { margin: 0 0 15px 0; color: var(--header-color); text-shadow: 0 0 5px var(--header-glow); }
+#enclave-app-container .input-group { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 15px; }
+#enclave-app-container .input-group label { flex-basis: 200px; flex-shrink: 0; padding-top: 5px; }
+#enclave-app-container .input-group input, #enclave-app-container .input-group select, #enclave-app-container .input-group textarea {
+    flex-grow: 1; background: var(--input-bg); border: 1px solid var(--border-color);
+    color: var(--text-color); font-family: 'VT323', monospace; font-size: 20px;
+    padding: 5px; outline: none; resize: vertical; cursor: none;
+}
+#enclave-app-container .input-group textarea { min-height: 80px; }
+#enclave-app-container .input-group input:focus, #enclave-app-container .input-group select:focus, #enclave-app-container .input-group textarea:focus { background: var(--highlight-bg); color: var(--highlight-text); }
+#enclave-app-container .button { background-color: var(--button-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 8px 16px; font-family: 'VT323', monospace; font-size: 20px; cursor: none; transition: all 0.2s; margin-right: 10px; margin-top: 5px; }
+#enclave-app-container .button:hover, #enclave-app-container .button.keyboard-focus { background-color: var(--button-hover-bg); color: var(--highlight-text); box-shadow: 0 0 8px var(--text-glow); }
+#enclave-app-container .button.delete { background-color: var(--delete-bg); }
+#enclave-app-container .button.delete:hover { background-color: var(--delete-hover-bg); }
+
+#enclave-app-container .data-table { width: 100%; border-collapse: collapse; }
+#enclave-app-container .data-table th, #enclave-app-container .data-table td { border: 1px solid var(--border-color); padding: 8px; text-align: left; }
+#enclave-app-container .data-table th { background-color: var(--highlight-bg); color: var(--highlight-text); }
+#enclave-app-container .data-table .actions { text-align: center; }
+#enclave-app-container .data-table .actions button { margin: 0 5px; font-size: 16px; padding: 2px 8px; }
+
+#enclave-app-container .warning-note { color: var(--warning-color); font-size: 0.9em; margin-top: 15px; }
+
+#enclave-app-container .content-view::-webkit-scrollbar, #enclave-app-container #side-module-content-left::-webkit-scrollbar, #enclave-app-container #side-module-content-right::-webkit-scrollbar, #enclave-app-container #boot-sequence::-webkit-scrollbar, #enclave-app-container #rank-list::-webkit-scrollbar, #enclave-app-container #logistics-log::-webkit-scrollbar { width: 10px; }
+#enclave-app-container .content-view::-webkit-scrollbar-track, #enclave-app-container #side-module-content-left::-webkit-scrollbar-track, #enclave-app-container #side-module-content-right::-webkit-scrollbar-track, #enclave-app-container #boot-sequence::-webkit-scrollbar-track, #enclave-app-container #rank-list::-webkit-scrollbar-track, #enclave-app-container #logistics-log::-webkit-scrollbar-track { background: #000; }
+#enclave-app-container .content-view::-webkit-scrollbar-thumb, #enclave-app-container #side-module-content-left::-webkit-scrollbar-thumb, #enclave-app-container #side-module-content-right::-webkit-scrollbar-thumb, #enclave-app-container #boot-sequence::-webkit-scrollbar-thumb, #enclave-app-container #rank-list::-webkit-scrollbar-thumb, #enclave-app-container #logistics-log::-webkit-scrollbar-thumb { background-color: var(--border-color); border-radius: 4px; border: 2px solid #000; }
+
+#enclave-app-container .modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 200; display: none; align-items: center; justify-content: center; }
+#enclave-app-container .modal-box { background: var(--monitor-bg); border: 2px solid var(--border-color); padding: 25px; text-align: center; box-shadow: 0 0 20px var(--header-glow); color: var(--text-color); }
+#enclave-app-container .modal-box p { margin: 0 0 20px 0; max-width: 400px; }
+#enclave-app-container .modal-box .button { margin: 0 10px; }
+#enclave-app-container .modal-box h3 { margin-top: 0; color: var(--header-color); }
+#enclave-app-container .modal-box .control-group { margin: 15px 0; text-align: left; }
+#enclave-app-container .modal-box .control-group > label { display: block; margin-bottom: 5px; }
+#enclave-app-container .modal-box .slider-container { display: flex; align-items: center; gap: 10px; }
+#enclave-app-container .modal-box .checkbox-container { display: flex; align-items: center; gap: 10px; padding: 2px 0; }
+#enclave-app-container .modal-box .checkbox-container label { margin-bottom: 0; }
+
+#enclave-app-container details { border: 1px dashed var(--border-color); padding: 10px; margin-top: 10px; }
+#enclave-app-container summary { cursor: none; color: var(--header-color); font-size: 1.1em; outline: none;}
+#enclave-app-container summary:hover, #enclave-app-container summary.keyboard-focus { color: var(--highlight-text); }
+#enclave-app-container summary::-webkit-details-marker { display: none; }
+#enclave-app-container details p, #enclave-app-container details pre { margin: 10px 0 0 15px; }
+#enclave-app-container details h4 { margin: 15px 0 5px 0; color: var(--header-color); }
+
+#enclave-app-container .terminal-footer { text-align: center; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; background: #111; padding: 10px; border-top: 2px solid #333; }
+#enclave-app-container #footer-controls { display: flex; gap: 15px; align-items: center; }
+#enclave-app-container .footer-screen {
+    flex-grow: 1;
+    background: var(--monitor-bg);
+    border: 1px solid var(--border-color);
+    padding: 5px 15px;
+    margin-right: 20px;
+    box-shadow: inset 0 0 10px #000;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+#enclave-app-container .hw-button {
+    width: 40px; height: 40px; border-radius: 4px;
+    background-color: #333; border: 1px solid #222;
+    border-top-color: #444; border-left-color: #444;
+    cursor: none; position: relative;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.5);
+    transition: all 0.1s;
+    display: flex; align-items: center; justify-content: center;
+}
+#enclave-app-container .hw-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    background-color: #2a2a2a;
+}
+#enclave-app-container .hw-button::after { content: attr(data-label); font-size: 12px; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); color: #888; letter-spacing: 1px; }
+#enclave-app-container .hw-button svg { width: 24px; height: 24px; fill: #999; }
+
+#enclave-app-container #power-button {
+    width: 50px; height: 50px; border-radius: 50%;
+    background-color: #444; border: 2px solid #222;
+    cursor: none; position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    transition: all 0.3s;
+}
+#enclave-app-container #power-button.on {
+    background-color: var(--button-bg);
+    box-shadow: 0 0 15px 5px var(--text-glow);
+}
+#enclave-app-container #power-button::after { content: 'POWER'; font-size: 14px; position: absolute; top: 110%; left: 50%; transform: translateX(-50%); color: #888; }
+
+#enclave-app-container input[type=range] { -webkit-appearance: none; background: transparent; width: 200px; }
+#enclave-app-container input[type=range]:focus { outline: none; }
+#enclave-app-container input[type=range]::-webkit-slider-runnable-track {
+    width: 100%; height: 8px; cursor: none;
+    background: #222; border-radius: 5px; border: 1px solid #000;
+    box-shadow: inset 0 0 5px #000;
+}
+#enclave-app-container input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; height: 20px; width: 10px;
+    border-radius: 3px; background: var(--border-color); cursor: none;
+    margin-top: -7px; box-shadow: 0 0 5px var(--text-glow);
+}
+
+#enclave-app-container #login-screen { justify-content: center; align-items: center; text-align: center; }
+#enclave-app-container #login-error, #enclave-app-container #password-prompt-error { color: var(--warning-color); height: 1.5em; animation: error-flicker 0.3s; }
+@keyframes error-flicker { 50% { opacity: 0.5; } }
+
+#enclave-app-container #map-view .terminal-section { display: flex; flex-direction: column; height: 95%; }
+#enclave-app-container #map-controls { flex-shrink: 0; }
+#enclave-app-container #map-display-wrapper { position: relative; flex-grow: 1; overflow: auto; border: 1px solid var(--border-color); background: rgba(0,0,0,0.2); }
+#enclave-app-container #map-ascii { font-size: 16px; line-height: 14px; white-space: pre; user-select: none; cursor: none; }
+#enclave-app-container #map-ascii .map-marker { color: var(--header-color); font-weight: bold; text-shadow: 0 0 5px var(--header-glow); padding: 0 2px; border-radius: 2px; }
+#enclave-app-container #map-ascii .map-marker:hover, #enclave-app-container #map-ascii .map-marker.active { color: var(--highlight-text); text-shadow: 0 0 8px var(--header-glow); background: var(--highlight-bg); }
+#enclave-app-container #map-info { border: 1px dashed var(--border-color); padding: 15px; min-height: 60px; margin-top: 15px;}
+#enclave-app-container #map-info h4 { margin: 0 0 10px 0; color: var(--header-color); }
+#enclave-app-container #map-scanline {
+    position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+    background: var(--header-color); opacity: 0.3;
+    box-shadow: 0 0 10px var(--header-glow);
+    animation: scanline-anim 8s linear infinite; pointer-events: none;
+}
+@keyframes scanline-anim { 0% { top: 0; } 100% { top: 100%; } }
+
+#enclave-app-container #lockdown-modal .modal-box {
+    background: rgba(100, 0, 0, 0.8);
+    border: 4px solid var(--warning-color);
+    box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+    animation: lockdown-border-pulse 0.5s infinite;
+}
+@keyframes lockdown-border-pulse { 50% { border-color: #fff; box-shadow: 0 0 70px rgba(255, 100, 100, 0.7); } }
+#enclave-app-container #lockdown-timer { font-size: 5em; color: var(--warning-color); text-shadow: 0 0 10px #fff; animation: text-flicker 1.5s infinite; }
+@keyframes text-flicker { 0% { opacity: 1; } 48% { opacity: 1; } 50% { opacity: 0.2; } 52% { opacity: 1; } 100% { opacity: 1; } }
+
+#enclave-app-container #bsod-overlay { background: #0000AA; color: #FFFFFF; font-family: 'Courier New', Courier, monospace; font-size: 18px; text-align: center; justify-content: center; align-items: center; z-index: 400; }
+#enclave-app-container #bsod-overlay pre { text-shadow: none; }
+#enclave-app-container #audio-log-playback { border: 1px dashed var(--border-color); padding: 10px; margin-top: 15px; height: 50px; }
+#enclave-app-container textarea.data-transfer { width: 98%; }
+
+#enclave-app-container #save-indicator-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5); z-index: 300;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    pointer-events: none;
+}
+#enclave-app-container #save-indicator-overlay.visible { opacity: 1; visibility: visible; }
+#enclave-app-container .save-box { background: var(--monitor-bg); border: 2px solid var(--border-color); padding: 20px; text-align: center; }
+#enclave-app-container .save-box pre { font-size: 10px; line-height: 10px; }
+#enclave-app-container .save-box h3 { margin-top: 10px; }
+
+#enclave-app-container #tictactoe-board { display: grid; grid-template-columns: repeat(3, 100px); gap: 5px; width: 310px; margin: 20px auto; }
+#enclave-app-container .ttt-cell { width: 100px; height: 100px; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 4em; cursor: none; }
+#enclave-app-container .ttt-cell:hover, #enclave-app-container .ttt-cell.keyboard-focus { background-color: var(--highlight-bg); }
+
+#enclave-app-container #boot-sequence { overflow-y: auto; height: 100%; }
+
+#enclave-app-container #notes-view .view-content { display: flex; height: 95%; gap: 15px;}
+#enclave-app-container #notes-list-container { width: 200px; flex-shrink: 0; display: flex; flex-direction: column; }
+#enclave-app-container #note-list { flex-grow: 1; overflow-y: auto; border: 1px solid var(--border-color); padding: 5px; }
+#enclave-app-container .note-item { padding: 5px; cursor: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#enclave-app-container .note-item:hover, #enclave-app-container .note-item.active, #enclave-app-container .note-item.keyboard-focus { background-color: var(--highlight-bg); color: var(--highlight-text); }
+#enclave-app-container #note-editor-container { flex-grow: 1; display: flex; flex-direction: column; gap: 10px; }
+#enclave-app-container #note-title { flex-shrink: 0; }
+#enclave-app-container #note-content { flex-grow: 1; resize: none; }
+
+#enclave-app-container .keyboard-focus { outline: 2px solid var(--border-color); box-shadow: 0 0 8px var(--text-glow); }
+
+#enclave-app-container #profiles-view .view-content { display: flex; height: 95%; gap: 15px; }
+#enclave-app-container #profile-list-container { width: 250px; flex-shrink: 0; display: flex; flex-direction: column; }
+#enclave-app-container #profile-list-items { flex-grow: 1; overflow-y: auto; border: 1px solid var(--border-color); padding: 5px; }
+#enclave-app-container .profile-item { padding: 5px; cursor: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#enclave-app-container .profile-item:hover, #enclave-app-container .profile-item.active, #enclave-app-container .profile-item.keyboard-focus { background-color: var(--highlight-bg); color: var(--highlight-text); }
+#enclave-app-container .profile-item small { font-size: 0.8em; opacity: 0.7; }
+#enclave-app-container #profile-details-container { flex-grow: 1; display: flex; flex-direction: column; }
+#enclave-app-container #profile-details { flex-grow: 1; display: flex; gap: 15px; }
+#enclave-app-container #profile-portrait { width: 150px; height: 150px; border: 1px solid var(--border-color); flex-shrink: 0; font-size: 6px; line-height: 7px; overflow: hidden; }
+#enclave-app-container #profile-info { flex-grow: 1; }
+#enclave-app-container #profile-info p { margin: 0 0 10px 0; }
+#enclave-app-container #profile-bio { flex-grow: 1; border: 1px dashed var(--border-color); padding: 10px; overflow-y: auto; margin-top: 10px;}
+
+#enclave-app-container .boot-logo .star { opacity: 0; transform: scale(0); animation: star-swoosh-in 0.5s forwards; }
+@keyframes star-swoosh-in { to { opacity: 1; transform: scale(1); } }
+
+#enclave-app-container #progress-bar-container { width: 100%; height: 20px; border: 1px solid var(--border-color); margin: 10px 0; }
+#enclave-app-container #progress-bar { width: 0%; height: 100%; background-color: var(--highlight-text); transition: width 0.2s linear; }
+
+#enclave-app-container #rank-view .view-content { display: flex; height: 95%; gap: 15px; }
+#enclave-app-container #rank-list-container { width: 300px; flex-shrink: 0; display: flex; flex-direction: column; border: 1px solid var(--border-color); }
+#enclave-app-container #rank-list { flex-grow: 1; overflow-y: auto; padding: 5px; }
+#enclave-app-container .rank-tier-header {
+    background-color: var(--rank-color-1); color: var(--header-color);
+    text-align: center; letter-spacing: 2px;
+    padding: 5px; margin-top: 10px;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+#enclave-app-container .rank-tier-header:first-child { margin-top: 0; }
+#enclave-app-container .rank-item { padding: 8px 10px; cursor: none; border-bottom: 1px dashed rgba(128,128,128,0.2); }
+#enclave-app-container .rank-item:hover, #enclave-app-container .rank-item.active, #enclave-app-container .rank-item.keyboard-focus {
+    background-color: var(--highlight-bg); color: var(--highlight-text);
+}
+#enclave-app-container #rank-details-container { flex-grow: 1; display: flex; flex-direction: column; }
+#enclave-app-container #rank-insignia { text-align: center; padding: 20px; border: 1px dashed var(--border-color); margin-bottom: 15px; min-height: 100px; }
+#enclave-app-container #rank-insignia svg { width: 100px; height: 100px; fill: var(--header-color); stroke: var(--header-color); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.2; }
+#enclave-app-container #rank-insignia .fill { fill: var(--header-color); fill-opacity: 1; }
+#enclave-app-container  #rank-insignia .no-fill { fill: none; }
+#enclave-app-container #rank-details-info h4 { margin: 15px 0 5px 0; color: var(--header-color); }
+#enclave-app-container #rank-details-info p { margin: 0 0 10px 10px; }
+
+#enclave-app-container #volume-osd { position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); border: 1px solid var(--border-color); padding: 10px 20px; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; z-index: 150; }
+#enclave-app-container #volume-osd.visible { opacity: 1; visibility: visible; }
+#enclave-app-container #volume-osd-bar { width: 200px; height: 15px; border: 1px solid var(--border-color); padding: 2px; }
+#enclave-app-container #volume-osd-level { height: 100%; background: var(--highlight-text); width: 20%; transition: width 0.2s; }
+
+#enclave-app-container #resource-overview { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+#enclave-app-container .resource-item { border: 1px dashed var(--border-color); padding: 10px; display: flex; align-items: center; gap: 10px; }
+#enclave-app-container .resource-item svg { width: 48px; height: 48px; fill: var(--header-color); flex-shrink: 0; }
+#enclave-app-container .resource-value.positive { color: #88ff88; }
+#enclave-app-container .resource-value.negative { color: #ff8888; }
+#enclave-app-container #production-lines .progress-bar-small { width: 100%; height: 10px; border: 1px solid var(--border-color); background: rgba(0,0,0,0.3); }
+#enclave-app-container  #production-lines .progress-bar-small > div { height: 100%; background: var(--highlight-text); transition: width 0.5s linear; }
+#enclave-app-container #logistics-log { height: 150px; overflow-y: auto; border: 1px dashed var(--border-color); padding: 10px; }
